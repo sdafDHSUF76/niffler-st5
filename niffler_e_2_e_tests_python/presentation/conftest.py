@@ -45,7 +45,7 @@ def go_login_page(presentation_page: PresentationPage):
 
 
 @pytest.fixture
-def go_login_page_fuction(presentation_page: PresentationPage) -> Callable[[], None]:
+def go_login_page_function(presentation_page: PresentationPage) -> Callable[[], None]:
     """Позволяет авторизоваться, это особенность приложения, что авторизовываемся через такие шаги.
 
     Такие шаги нужны, после того, как создали пользователя.
@@ -57,7 +57,7 @@ def go_login_page_fuction(presentation_page: PresentationPage) -> Callable[[], N
 
 
 @pytest.fixture
-def logout(main_page: 'MainPage', presentation_page: 'PresentationPage'):
+def logout(main_page: 'MainPage'):
     """Выходим из под учетки юзера."""
     yield
     main_page.click(main_page.logout)

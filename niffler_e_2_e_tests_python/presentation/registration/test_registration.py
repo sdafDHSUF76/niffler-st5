@@ -19,13 +19,13 @@ class TestRegistration:
     def test_authorization_with_create_user_random(
         self,
         registration_page: 'RegisterPage',
-        go_login_page_fuction: Callable[[], None],
+        go_login_page_function: Callable[[], None],
         login_page: 'LoginPage',
         main_page: 'MainPage',
     ):
         username: str = Faker().user_name()
         password: str = Faker().password()
         registration_page.register_new_user(username, password)
-        go_login_page_fuction()
+        go_login_page_function()
         login_page.authorization(username, password)
         expect(main_page.driver.locator(main_page.header)).to_have_text(main_page.text_header)
