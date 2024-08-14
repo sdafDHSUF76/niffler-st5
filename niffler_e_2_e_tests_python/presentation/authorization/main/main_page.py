@@ -5,6 +5,5 @@ class MainPage(BaseLogic):
     path = '/main'
     header = '//h1'
     logout = "//button[contains(@class,'button-icon_type_logout')]"
-    text_error = "//p[@class='form__error']"
 
     text_header = 'Niffler. The coin keeper.'

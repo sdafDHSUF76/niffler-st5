@@ -13,7 +13,10 @@ if TYPE_CHECKING:
 
 @pytest.fixture(scope='class')
 def presentation_page(driver: 'Page') -> PresentationPage:
-    """Получаем страницу Main со всей логикой ее."""
+    """Получаем страницу Presentation со всей логикой ее.
+
+    Эта страница, что по этому url Находится http://frontend.niffler.dc
+    """
     return PresentationPage(driver)
 
 
@@ -43,6 +46,10 @@ def go_login_page(presentation_page: PresentationPage):
 
 @pytest.fixture
 def go_login_page_fuction(presentation_page: PresentationPage) -> Callable[[], None]:
+    """Позволяет авторизоваться, это особенность приложения, что авторизовываемся через такие шаги.
+
+    Такие шаги нужны, после того, как создали пользователя.
+    """
     def _method():
         presentation_page.goto_url(FRONT_URL1)
         presentation_page.click(presentation_page.button_login)
@@ -51,12 +58,14 @@ def go_login_page_fuction(presentation_page: PresentationPage) -> Callable[[], N
 
 @pytest.fixture
 def logout(main_page: 'MainPage', presentation_page: 'PresentationPage'):
+    """Выходим из под учетки юзера."""
     yield
     main_page.click(main_page.logout)
 
 
 @pytest.fixture
 def clear_storage(driver: 'Page'):
+    """Чистим Storage."""
     yield
     driver.evaluate("() => sessionStorage.clear()")
     driver.evaluate("() => localStorage.clear()")

@@ -10,5 +10,5 @@ if TYPE_CHECKING:
 
 @pytest.fixture(scope='class')
 def login_page(driver: 'Page') -> LoginPage:
-    """Получаем страницу Main со всей логикой ее."""
+    """Получаем страницу Login со всей логикой ее."""
     return LoginPage(driver)

@@ -14,6 +14,7 @@ if TYPE_CHECKING:
 
 @pytest.fixture(scope='class')
 def prepare_test_user(db_niffler_auth: 'DB'):
+    """Создаем тестового юзера."""
     number_of_users: str = db_niffler_auth.get_value(
         'select count(*) from "user" where username = \'qwe\''
     )[0][0]
@@ -34,7 +35,6 @@ def driver() -> Page:
     """Получить WebDriver."""
     with sync_playwright() as playwright:
         browser: Browser = playwright.chromium.launch(channel="chrome", headless=False)
-        # context: BrowserContext = browser.new_context(base_url=FRONT_URL)
         page: Page = browser.new_page()
         yield page
         page.close()

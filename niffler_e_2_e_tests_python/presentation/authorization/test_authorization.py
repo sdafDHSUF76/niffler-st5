@@ -17,14 +17,12 @@ class TestAuthorization:
     @pytest.mark.usefixtures('go_login_page', 'logout', 'clear_storage')
     def test_authorization(self, login_page: 'LoginPage', main_page: 'MainPage'):
         login_page.authorization(TEST_USER, TEST_PASSWORD)
-        expect(main_page.driver.locator(main_page.header)).to_have_text('Niffler. The coin keeper.')
+        expect(main_page.driver.locator(main_page.header)).to_have_text(main_page.text_header)
 
     @pytest.mark.usefixtures('go_login_page')
     @pytest.mark.parametrize('login', ['asdf', 'qwer', 'we', ' ', ' ', '\32%$^&*('])
-    def test_authorization_with_invalid_login(
-        self, login: str, login_page: 'LoginPage', main_page: 'MainPage'
-    ):
+    def test_authorization_with_invalid_login(self, login: str, login_page: 'LoginPage'):
         login_page.authorization(login, TEST_PASSWORD)
-        expect(main_page.driver.locator(main_page.text_error)).to_have_text(
+        expect(login_page.driver.locator(login_page.text_error)).to_have_text(
             ErrorAuthorization.INVALID_USER_CREDENTIALS,
         )

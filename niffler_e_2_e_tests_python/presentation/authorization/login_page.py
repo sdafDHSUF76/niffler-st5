@@ -7,6 +7,7 @@ class LoginPage(BaseLogic):
     input_username = "//input[@name='username']"
     input_password = "//input[@name='password']"
     button_sign_in = "//button[@type='submit']"
+    text_error = "//p[@class='form__error']"
 
     def authorization(self, username: str, password: str):
         self.fill(self.input_username, username)
