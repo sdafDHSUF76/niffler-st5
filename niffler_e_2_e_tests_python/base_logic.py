@@ -1,12 +1,10 @@
-from typing import TYPE_CHECKING, Optional
+from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from playwright.sync_api import Page
 
 
 class BaseLogic:
-
-    path = ''
 
     def __init__(self, driver: 'Page'):
         self.driver = driver
@@ -19,6 +17,6 @@ class BaseLogic:
         """Ввести данные в Input на странице."""
         self.driver.locator(locator).fill(value)
 
-    def goto_url(self, path: Optional[str] = None) -> None:
-        """Ввести данные в Input на странице."""
-        self.driver.goto(path or self.path)
+    def goto_url(self, url: str) -> None:
+        """Переходим по url."""
+        self.driver.goto(url)

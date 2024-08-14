@@ -7,6 +7,7 @@ from playwright.sync_api import Browser, Page, sync_playwright
 
 from niffler_e_2_e_tests_python.configs import TEST_PASSWORD, TEST_USER, FRONT_URL1
 from niffler_e_2_e_tests_python.fixtures.database import db_niffler_auth  # noqa F401
+from niffler_e_2_e_tests_python.presentation.registration.register_page import RegisterPage
 
 if TYPE_CHECKING:
     from niffler_e_2_e_tests_python.fixtures.database import DB
@@ -16,11 +17,11 @@ if TYPE_CHECKING:
 def prepare_test_user(db_niffler_auth: 'DB'):
     """Создаем тестового юзера."""
     number_of_users: str = db_niffler_auth.get_value(
-        'select count(*) from "user" where username = \'qwe\''
+        'select count(*) from "user" where username = \'%s\'' % TEST_USER,
     )[0][0]
     if number_of_users:
         response = requests.post(
-            f'{FRONT_URL1}/register',
+            f'{FRONT_URL1}{RegisterPage.path}',
             data=dict(username=TEST_USER, password=TEST_PASSWORD, passwordSubmit=TEST_PASSWORD),
             headers={'Content-Type': 'application/x-www-form-urlencoded'}
         )
