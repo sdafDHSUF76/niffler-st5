@@ -1,0 +1,41 @@
+from http import HTTPStatus
+from typing import TYPE_CHECKING
+
+import pytest
+import requests
+from playwright.sync_api import Browser, Page, sync_playwright
+
+from niffler_e_2_e_tests_python.configs import TEST_PASSWORD, TEST_USER, FRONT_URL1
+from niffler_e_2_e_tests_python.fixtures.database import db_niffler_auth  # noqa F401
+
+if TYPE_CHECKING:
+    from niffler_e_2_e_tests_python.fixtures.database import DB
+
+
+@pytest.fixture(scope='class')
+def prepare_test_user(db_niffler_auth: 'DB'):
+    number_of_users: str = db_niffler_auth.get_value(
+        'select count(*) from "user" where username = \'qwe\''
+    )[0][0]
+    if number_of_users:
+        response = requests.post(
+            f'{FRONT_URL1}/register',
+            data=dict(username=TEST_USER, password=TEST_PASSWORD, passwordSubmit=TEST_PASSWORD),
+            headers={'Content-Type': 'application/x-www-form-urlencoded'}
+        )
+        # тут, как я понял на запросе происходит редирект, который делает запросом GET
+        assert len(response.history) == 1
+        assert response.history[0].status_code == HTTPStatus.FOUND
+        assert response.history[0].text == ''
+
+
+@pytest.fixture(scope='session')
+def driver() -> Page:
+    """Получить WebDriver."""
+    with sync_playwright() as playwright:
+        browser: Browser = playwright.chromium.launch(channel="chrome", headless=False)
+        # context: BrowserContext = browser.new_context(base_url=FRONT_URL)
+        page: Page = browser.new_page()
+        yield page
+        page.close()
+        browser.close()
